@@ -45,7 +45,7 @@
 
             <h1>Offerte Speciali</h1>
 
-            <a class="btn btn-primary" th:href="@{/special-offers/create(pizzaId=${pizza.id})}">Aggiungi Offerta</a>
+            <a class="btn btn-primary" th:href="@{/special-offers/create(pizzaId=${pizza.id})}" th:if="${pizza.numberOfOffers < 3}">Aggiungi Offerta</a>
 
             <table class="table">
                 <thead>

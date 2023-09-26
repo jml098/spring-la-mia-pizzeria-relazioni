@@ -81,4 +81,8 @@ public class Pizza {
     public void setSpecialOffers(List<SpecialOffer> specialOffers) {
         this.specialOffers = specialOffers;
     }
+
+    public int getNumberOfOffers() {
+        return this.specialOffers.size();
+    }
 }
