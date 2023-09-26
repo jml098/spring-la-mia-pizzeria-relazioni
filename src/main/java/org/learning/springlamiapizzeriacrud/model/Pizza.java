@@ -31,7 +31,7 @@ public class Pizza {
     @Column(name = "image_url")
     private String image;
 
-    @OneToMany(mappedBy = "pizza")
+    @OneToMany(mappedBy = "pizza", cascade = {CascadeType.REMOVE})
     private List<SpecialOffer> specialOffers;
 
     public Long getId() {
