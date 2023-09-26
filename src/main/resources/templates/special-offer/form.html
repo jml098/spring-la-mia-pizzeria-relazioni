@@ -24,8 +24,8 @@
                     th:action="@{/special-offers/{method}{id}(method=${specialOffer.id} ? 'edit/' : 'create', id=${specialOffer.id} ? ${specialOffer.id} : '')}"
                     th:object="${specialOffer}"
             >
-                <input th:field="*{pizza}" type="hidden">
 
+                <th:block th:replace="fragments/form-input.html :: input('hidden', 'Pizza', 'pizza')" />
                 <th:block th:replace="fragments/form-input.html :: input('text', 'Nome offerta', 'title')" />
                 <th:block th:replace="fragments/form-input.html :: input('date', 'Data inizio', 'startDate')" />
                 <th:block th:replace="fragments/form-input.html :: input('date', 'Data fine', 'endDate')" />
