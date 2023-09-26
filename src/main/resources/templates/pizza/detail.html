@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
     <title th:text="${pizza.name}"></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
 </head>
 
@@ -17,13 +18,12 @@
         </div>
     </div>
     <div class="row ">
-        <div class="col-6 mx-auto">
+        <div class="col-3 mx-auto">
             <div class="card text-center">
                 <div class="card-body">
                     <div style="padding-bottom: 100%;width: 100%;height: 0;position: relative;">
                         <img
                                 alt="" height="100%"
-                                src="assets/img/Stars_in_the_Universe_4K_Relaxing_Screensaver.gif"
                                 style="position: absolute;top: 0;width: 100%;height: 100%;left: 0;object-fit: cover;"
                                 th:src="@{${pizza.image}}"
                         />
@@ -31,51 +31,70 @@
                     <h4 class="card-title" th:text="${pizza.name}">Diavola</h4>
                     <h6 class="text-muted card-subtitle mb-2" th:text="${pizza.description}">Pomodori, mozzarella</h6>
                     <p class="lead fw-bolder card-text" th:text="|${pizza.price}€|">8.99€</p>
-                    <a class="btn btn-primary" th:href="@{/edit/{id}(id=${pizza.id})}">
-                        Modifica
-                    </a>
-                    <form method="post" th:action="@{/delete/{id}(id=${pizza.id})}">
-                        <input class="btn btn-danger" type="submit" value="Elimina">
-                    </form>
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-primary" th:href="@{/edit/{id}(id=${pizza.id})}">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <form method="post" th:action="@{/delete/{id}(id=${pizza.id})}">
+                            <button class="btn btn-danger" type="submit">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
 
-        <div class="col-6">
-
+        <div class="col">
             <h1>Offerte Speciali</h1>
 
-            <a class="btn btn-primary" th:href="@{/special-offers/create(pizzaId=${pizza.id})}" th:if="${pizza.numberOfOffers < 3}">Aggiungi Offerta</a>
+            <a class="btn btn-primary" th:href="@{/special-offers/create(pizzaId=${pizza.id})}"
+               th:if="${pizza.numberOfOffers < 3}">Aggiungi Offerta</a>
 
-            <table class="table">
+
+            <table class="table" th:if="${pizza.numberOfOffers > 0}">
                 <thead>
                 <tr>
                     <th>Nome</th>
                     <th>Inizio</th>
                     <th>Fine</th>
-                    <th>...</th>
+                    <th>Opzioni</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="specialOffer, status : ${pizza.specialOffers}">
+
                     <td th:text="${specialOffer.title}"></td>
                     <td th:text="${specialOffer.startDate}"></td>
                     <td th:text="${specialOffer.endDate}"></td>
-                    <td>
+
+                    <td class="d-flex justify-content-center">
+
+                        <a class="btn btn-primary" th:href="@{/special-offers/edit/{id}(id=${specialOffer.id})}">
+                            <i class="bi bi-pencil-square"> </i>
+                        </a>
+
                         <form method="POST" th:action="@{/special-offers/delete/{id}(id=${specialOffer.id})}">
-                            <button class="btn btn-danger" type="submit">Elimina</button>
+                            <button class="btn btn-danger" type="submit">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </form>
-                        <a class="btn btn-primary" th:href="@{/special-offers/edit/{id}(id=${specialOffer.id})}">Modifica</a>
+
                     </td>
                 </tr>
                 </tbody>
             </table>
+
+            <div class="alert alert-info" th:unless="${pizza.numberOfOffers > 0}">
+                Non ci sono offerte speciali.
+            </div>
         </div>
     </div>
 
 
     <div class="row">
-        <div class="col-2 mx-auto">
+        <div class="col-12 d-flex justify-content-center">
             <a class="btn btn-danger" th:href="@{/}">Indietro</a>
         </div>
     </div>
