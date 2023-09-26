@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
+    <title>Untitled</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="height: 100vh;">
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-1 text-center">Le Nostre Pizze</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4" th:each="pizza: ${pizzas}">
+            <div class="card text-center">
+                <div class="card-body">
+                    <div style="padding-bottom: 100%;width: 100%;height: 0;position: relative;">
+                        <img
+                                alt="" height="100%"
+                                src="assets/img/Stars_in_the_Universe_4K_Relaxing_Screensaver.gif"
+                                style="position: absolute;top: 0;width: 100%;height: 100%;left: 0;object-fit: cover;"
+                                th:src="@{${pizza.image}}"/>
+                    </div>
+                    <a th:href="@{/{pizzaId}(pizzaId=${pizza.id})}">
+                        <h4 class="card-title" th:text="${pizza.name}">Diavola</h4>
+                    </a>
+                    <h6 class="text-muted card-subtitle mb-2" th:text="${pizza.description}">Pomodori, mozzarella</h6>
+                    <p class="lead fw-bolder card-text" th:text="|${pizza.price}€|">8.99€</p>
+                    <a class="btn btn-primary" th:href="@{/edit/{id}(id=${pizza.id})}">
+                        Modifica
+                    </a>
+                    <form method="post" th:action="@{/delete/{id}(id=${pizza.id})}">
+                        <input class="btn btn-danger" type="submit" value="Elimina">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2 mx-auto">
+            <a class="btn btn-primary" th:href="@{/create}">Aggiungi Pizza</a>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
