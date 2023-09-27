@@ -3,49 +3,43 @@ package org.learning.springlamiapizzeriacrud.controller;
 import jakarta.validation.Valid;
 import org.learning.springlamiapizzeriacrud.model.Pizza;
 import org.learning.springlamiapizzeriacrud.model.SpecialOffer;
-import org.learning.springlamiapizzeriacrud.repository.PizzaRepository;
-import org.learning.springlamiapizzeriacrud.repository.SpecialOfferRepository;
+import org.learning.springlamiapizzeriacrud.service.PizzaService;
+import org.learning.springlamiapizzeriacrud.service.SpecialOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
 public class IndexController {
-    private final PizzaRepository pizzaRepository;
-    private final SpecialOfferRepository specialOfferRepository;
+
+    private final PizzaService pizzaService;
+    private final SpecialOfferService specialOfferService;
+
 
     @Autowired
-    public IndexController(PizzaRepository pizzaRepository, SpecialOfferRepository specialOfferRepository) {
-        this.pizzaRepository = pizzaRepository;
-        this.specialOfferRepository = specialOfferRepository;
+    public IndexController(
+            PizzaService pizzaService, SpecialOfferService specialOfferService
+    ) {
+        this.pizzaService = pizzaService;
+        this.specialOfferService = specialOfferService;
     }
-
 
     @GetMapping
     public String index(Model model) {
-        List<Pizza> pizzaList = pizzaRepository.findAll();
-        model.addAttribute("pizzas", pizzaList);
+        model.addAttribute("pizzas", pizzaService.getAll());
+
         return "index";
     }
 
     @GetMapping("/{id}")
-    public String pizza(@PathVariable Long id, Model model) {
-
-        Optional<Pizza> pizzaOptional = pizzaRepository.findById(id);
-        if (pizzaOptional.isPresent()) {
-            model.addAttribute("pizza", pizzaOptional.get());
-            model.addAttribute("specialOffer", new SpecialOffer());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public String pizza(
+            @PathVariable Long id, Model model
+    ) {
+        model.addAttribute("pizza", pizzaService.getById(id));
+        model.addAttribute("specialOffer", new SpecialOffer());
 
         return "pizza/detail";
     }
@@ -58,92 +52,101 @@ public class IndexController {
     }
 
     @PostMapping("/create")
-    public String createPizza(@Valid @ModelAttribute("pizza") Pizza pizza, BindingResult bindingResult) {
-
+    public String createPizza(
+            @Valid @ModelAttribute("pizza") Pizza pizza,
+            BindingResult bindingResult
+    ) {
         if (bindingResult.hasErrors()) return "pizza/form";
 
-        pizzaRepository.save(pizza);
+        pizzaService.save(pizza);
 
         return "redirect:/";
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable Long id) {
-
-        Optional<Pizza> pizzaOptional = pizzaRepository.findById(id);
-        if (pizzaOptional.isPresent()) {
-            model.addAttribute("pizza", pizzaOptional.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    public String edit(
+            Model model, @PathVariable Long id
+    ) {
+        model.addAttribute("pizza", pizzaService.getById(id));
 
         return "pizza/edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String editPizza(@PathVariable Long id, @Valid @ModelAttribute("pizza") Pizza pizza, BindingResult bindingResult) {
-
+    public String editPizza(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("pizza") Pizza pizza,
+            BindingResult bindingResult
+    ) {
         if (bindingResult.hasErrors()) return "pizza/edit";
 
-        pizzaRepository.save(pizza);
+        pizzaService.save(pizza);
 
         return "redirect:/";
     }
 
     @PostMapping("/delete/{id}")
     public String deletePizza(@PathVariable Long id) {
-        pizzaRepository.deleteById(id);
+        pizzaService.deleteById(id);
+
         return "redirect:/";
     }
 
     @GetMapping("/special-offers/create")
-    public String createSpecialOffer(Model model, @RequestParam("pizzaId") Long pizzaId) {
+    public String createSpecialOffer(
+            Model model, @RequestParam("pizzaId") Long pizzaId
+    ) {
         SpecialOffer specialOffer = new SpecialOffer();
 
-        Optional<Pizza> pizza = pizzaRepository.findById(pizzaId);
-        if (pizza.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza not found");
-
-        specialOffer.setPizza(pizza.get());
-
+        specialOffer.setPizza(pizzaService.getById(pizzaId));
 
         model.addAttribute("specialOffer", specialOffer);
         return "special-offer/form";
     }
 
     @GetMapping("/special-offers/edit/{id}")
-    public String editSpecialForm(Model model, @PathVariable Long id) {
-        Optional<SpecialOffer> specialOffer = specialOfferRepository.findById(id);
-        if (specialOffer.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Special offer not found");
+    public String editSpecialOffer(
+            Model model, @PathVariable Long id
+    ) {
+        model.addAttribute("specialOffer", specialOfferService.getById(id));
 
-        model.addAttribute("specialOffer", specialOffer.get());
         return "special-offer/form";
     }
 
     @PostMapping("/special-offers/create")
-    public String createSpecialOffer(@Valid @ModelAttribute("specialOffer") SpecialOffer specialOffer, BindingResult bindingResult) {
-
+    public String createSpecialOffer(
+            @Valid @ModelAttribute("specialOffer") SpecialOffer specialOffer,
+            BindingResult bindingResult
+    ) {
         if (bindingResult.hasErrors()) return "special-offer/form";
 
-        specialOfferRepository.save(specialOffer);
+        specialOfferService.save(specialOffer);
 
         return "redirect:/" + specialOffer.getPizza().getId();
     }
 
     @PostMapping("/special-offers/edit/{id}")
-    public String editSpecialOffer(@PathVariable Long id, @Valid @ModelAttribute("specialOffer") SpecialOffer specialOffer, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) return "redirect:/" + specialOffer.getPizza().getId();
+    public String editSpecialOffer(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("specialOffer") SpecialOffer specialOffer,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/" + specialOffer.getPizza().getId();
+        }
 
         specialOffer.setId(id);
-        specialOfferRepository.save(specialOffer);
+        specialOfferService.save(specialOffer);
 
         return "redirect:/" + specialOffer.getPizza().getId();
     }
 
     @PostMapping("/special-offers/delete/{id}")
     public String deleteSpecialOffer(@PathVariable Long id) {
-        Long pizzaId = specialOfferRepository.findById(id).get().getPizza().getId();
-        specialOfferRepository.deleteById(id);
+        Long pizzaId = specialOfferService.getById(id).getPizza().getId();
+        specialOfferService.deleteById(id);
+
         return "redirect:/" + pizzaId;
     }
+
 }

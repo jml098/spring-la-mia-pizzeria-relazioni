@@ -22,7 +22,7 @@
                     <div style="padding-bottom: 100%;width: 100%;height: 0;position: relative;">
                         <img
                                 alt="" height="100%"
-                                src="assets/img/Stars_in_the_Universe_4K_Relaxing_Screensaver.gif"
+                                src="#"
                                 style="position: absolute;top: 0;width: 100%;height: 100%;left: 0;object-fit: cover;"
                                 th:src="@{${pizza.image}}"/>
                     </div>
@@ -31,6 +31,8 @@
                     </a>
                     <h6 class="text-muted card-subtitle mb-2" th:text="${pizza.description}">Pomodori, mozzarella</h6>
                     <p class="lead fw-bolder card-text" th:text="|${pizza.price}€|">8.99€</p>
+                    <span class="bg-danger" th:if="${pizza.numberOfOffers > 0}">In Offerta!</span>
+
                     <a class="btn btn-primary" th:href="@{/edit/{id}(id=${pizza.id})}">
                         Modifica
                     </a>
