@@ -46,4 +46,12 @@ public class PizzaService {
         pizzaRepository.save(pizza);
     }
 
+    public void update(Pizza pizza) {
+        if (!pizzaRepository.existsById(pizza.getId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        pizzaRepository.save(pizza);
+    }
+
 }

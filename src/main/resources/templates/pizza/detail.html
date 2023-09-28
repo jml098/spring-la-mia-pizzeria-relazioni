@@ -30,6 +30,7 @@
                     </div>
                     <h4 class="card-title" th:text="${pizza.name}">Diavola</h4>
                     <h6 class="text-muted card-subtitle mb-2" th:text="${pizza.description}">Pomodori, mozzarella</h6>
+                    <span th:each="ingredient: ${pizza.ingredients}" th:text="|${ingredient.name}, |"></span>
                     <p class="lead fw-bolder card-text" th:text="|${pizza.price}€|">8.99€</p>
                     <div class="d-flex justify-content-center">
                         <a class="btn btn-primary" th:href="@{/edit/{id}(id=${pizza.id})}">

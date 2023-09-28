@@ -1,7 +1,10 @@
 <th:block th:fragment="input(type, label, fieldName)">
     <label class="w-100">
         <th:block th:text="${#strings.capitalize(label)}"/>
-        <input class="form-control" step="0.01" th:errorClass="is-invalid" th:field="*{__${fieldName}__}" th:type="${type}">
+
+        <input class="form-control" step="0.01" th:errorClass="is-invalid" th:field="*{__${fieldName}__}"
+               th:type="${type}">
+
     </label>
 
     <div class="text-danger">

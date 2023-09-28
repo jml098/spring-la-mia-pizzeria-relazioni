@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "pizzas")
 public class Pizza {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +34,17 @@ public class Pizza {
 
     @OneToMany(mappedBy = "pizza", cascade = {CascadeType.REMOVE})
     private List<SpecialOffer> specialOffers;
+
+    @ManyToMany
+    private List<Ingredient> ingredients;
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 
     public Long getId() {
         return id;
@@ -85,4 +97,5 @@ public class Pizza {
     public int getNumberOfOffers() {
         return this.specialOffers.size();
     }
+
 }

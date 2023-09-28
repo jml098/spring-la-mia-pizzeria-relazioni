@@ -16,6 +16,15 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-2 mx-auto">
+            <a class="btn btn-primary" href="/ingredients">Ingredienti</a>
+        </div>
+        <div class="col-2 mx-auto">
+            <a class="btn btn-primary" th:href="@{/create}">Aggiungi Pizza</a>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-4" th:each="pizza: ${pizzas}">
             <div class="card text-center">
                 <div class="card-body">
@@ -30,6 +39,7 @@
                         <h4 class="card-title" th:text="${pizza.name}">Diavola</h4>
                     </a>
                     <h6 class="text-muted card-subtitle mb-2" th:text="${pizza.description}">Pomodori, mozzarella</h6>
+                    <span th:each="ingredient: ${pizza.ingredients}" th:text="|${ingredient.name}, |"></span>
                     <p class="lead fw-bolder card-text" th:text="|${pizza.price}€|">8.99€</p>
                     <span class="bg-danger" th:if="${pizza.numberOfOffers > 0}">In Offerta!</span>
 
@@ -43,11 +53,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-2 mx-auto">
-            <a class="btn btn-primary" th:href="@{/create}">Aggiungi Pizza</a>
-        </div>
-    </div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form
+                    id="special-offer-form"
+                    method="POST"
+                    th:action="@{/ingredients/{method}{id}(method=${ingredient.id} ? 'edit/' : 'create', id=${ingredient.id} ? ${ingredient.id} : '')}"
+                    th:object="${ingredient}"
+            >
+                <th:block th:replace="fragments/form-input.html :: input('text', 'Nome Ingrediente', 'name')" />
+
+                <button class="btn btn-primary" th:text="*{id} ? 'Modifica' : 'Aggiungi'" type="submit"></button>
+                <a class="btn btn-danger" href="/ingredients">Indietro</a>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
